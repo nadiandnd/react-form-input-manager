@@ -7,6 +7,9 @@ const GeneralLayout: React.FC = () => {
       <header>
         <h1>General Layout</h1>
         <nav>
+          <a href="/">&#8592;Back</a>
+        </nav>
+        <nav>
           <a href="/login">Login</a> | <a href="/register">Register</a>
         </nav>
       </header>
