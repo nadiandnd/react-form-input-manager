@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { RegisterFormData } from "../types/User";
 import Modal from "../components/shared/Modal";
 import RegistrationForm from "../components/forms/RegistrationForm";
 
 const Register: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userData, setUserData] = useState<RegisterFormData | null>(null);
+  const [userData, setUserData] = useState<{
+    username: string;
+    email: string;
+  } | null>(null);
 
-  const handleRegisterSuccess = (data: RegisterFormData) => {
+  const handleRegisterSuccess = (data: { username: string; email: string }) => {
     setUserData(data);
     setIsModalOpen(true);
   };
