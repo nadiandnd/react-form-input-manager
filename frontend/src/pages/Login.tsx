@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useResource from "../hooks/useResource";
 import { LoginFormData } from "../types/User";
 import { LoginResponse } from "../types/ApiResponses";
@@ -15,16 +15,16 @@ const Login = () => {
 
   const handleLogin = async (formData: LoginFormData) => {
     await fetchResource(`${API_URL}/api/login`, formData);
+  };
 
-    console.log(data);
-
+  useEffect(() => {
     if (data?.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
-
       navigate("/");
     }
-  };
+  }, [data, navigate]);
+
   return (
     <div>
       <h1>Login</h1>

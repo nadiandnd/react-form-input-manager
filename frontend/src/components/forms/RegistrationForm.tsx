@@ -15,6 +15,7 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
   const [formError, setFormError] = useState<string | null>(null);
+  const [hasRegistered, setHasRegistered] = useState(false);
 
   const { data, loading, error, fetchResource } = useResource<
     RegisterResponse,
@@ -22,12 +23,13 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   >();
 
   useEffect(() => {
-    if (data) {
+    if (data && !hasRegistered) {
       const RegisteredUserData = {
         username: data.user.username,
         email: emailRef.current?.value || "",
       };
       onSuccess(RegisteredUserData);
+      setHasRegistered(true);
     }
   }, [data, onSuccess]);
 
@@ -50,8 +52,16 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     }
 
     setFormError(null);
+
     const userData: RegisterFormData = { username, email, password };
     await fetchResource(`${API_URL}/api/register`, userData);
+    if (data) {
+      const RegisteredUserData = {
+        username: data.user.username,
+        email: emailRef.current?.value || "",
+      };
+      onSuccess(RegisteredUserData);
+    }
   };
 
   return (
