@@ -3,9 +3,13 @@ export interface RegisterResponse {
     id: string;
     username: string;
   };
-  token?: string;
 }
 
 export interface ApiErrorResponse {
   message: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  username: string;
 }

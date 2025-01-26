@@ -18,16 +18,13 @@ const useResource = <T, P = undefined>(): UseResourceReturn<T, P> => {
     setLoading(true);
     setError(null);
 
-    console.log(url, payload);
-
     try {
-      const response = await axios.post(url, payload);
+      const response = await axios.post<T>(url, payload);
       setData(response.data);
     } catch (err) {
       const axiosError = err as AxiosError;
       const errorMessage = axiosError.response?.data as ApiErrorResponse;
       setError(errorMessage?.message || "Something went wrong");
-      alert(error);
     } finally {
       setLoading(false);
     }

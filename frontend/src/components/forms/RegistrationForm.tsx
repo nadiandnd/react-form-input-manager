@@ -14,9 +14,9 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const { data, loading, fetchResource } = useResource<
+  const { data, loading, error, fetchResource } = useResource<
     RegisterResponse,
     RegisterFormData
   >();
@@ -28,40 +28,30 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         email: emailRef.current?.value || "",
       };
       onSuccess(RegisteredUserData);
-      console.log("Registration successful:", data);
     }
   }, [data, onSuccess]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    const username = usernameRef.current?.value || "";
+    const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
     const confirmPassword = confirmPasswordRef.current?.value || "";
 
     if (password != confirmPassword) {
-      setError("Passwords da not match");
+      setFormError("Passwords da not match");
       return;
     }
 
-    if (
-      usernameRef.current?.value &&
-      emailRef.current?.value &&
-      password &&
-      confirmPassword
-    ) {
-      const userData: RegisterFormData = {
-        username: usernameRef.current?.value || "",
-        email: emailRef.current?.value || "",
-        password: password,
-      };
-
-      setError(null);
-      try {
-        await fetchResource(`${API_URL}/api/register`, userData);
-      } catch (error) {
-        setError(error || "Something went wrong during registration");
-      }
+    if (!username || !email || !password || !confirmPassword) {
+      setFormError("All fields are required.");
+      return;
     }
+
+    setFormError(null);
+    const userData: RegisterFormData = { username, email, password };
+    await fetchResource(`${API_URL}/api/register`, userData);
   };
 
   return (
@@ -82,6 +72,9 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         Confirm Password:
         <input type="password" ref={confirmPasswordRef} />
       </label>
+      <br />
+      {formError && <small style={{ color: "red" }}>{formError}</small>}
+
       {error && <small style={{ color: "red" }}>{error}</small>}
 
       {loading && <div>Loading...</div>}
@@ -89,7 +82,9 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       {data && !loading && <div>Registration successful!</div>}
 
       <br />
-      <button type="submit">Register</button>
+      <button type="submit" disabled={loading}>
+        Register
+      </button>
     </form>
   );
 };
