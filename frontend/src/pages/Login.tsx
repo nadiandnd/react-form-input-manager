@@ -16,11 +16,13 @@ const Login = () => {
   const handleLogin = async (formData: LoginFormData) => {
     await fetchResource(`${API_URL}/api/login`, formData);
 
+    console.log(data);
+
     if (data?.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
 
-      navigate("/home");
+      navigate("/");
     }
   };
   return (
