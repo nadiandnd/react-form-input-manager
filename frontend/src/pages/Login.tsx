@@ -5,6 +5,7 @@ import { LoginResponse } from "../types/ApiResponses";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 import LoginForm from "../components/forms/LoginForm";
+import "./Login.css";
 
 const Login = () => {
   const { data, loading, error, fetchResource } = useResource<
@@ -26,9 +27,11 @@ const Login = () => {
   }, [data, navigate]);
 
   return (
-    <div>
-      <h1>Login</h1>
-      <LoginForm onSubmit={handleLogin} loading={loading} error={error} />
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">Login</h1>
+        <LoginForm onSubmit={handleLogin} loading={loading} error={error} />
+      </div>
     </div>
   );
 };

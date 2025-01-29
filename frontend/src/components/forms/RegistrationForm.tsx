@@ -31,7 +31,7 @@ const RegistrationForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       onSuccess(RegisteredUserData);
       setHasRegistered(true);
     }
-  }, [data, onSuccess]);
+  }, [data, hasRegistered, onSuccess]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
